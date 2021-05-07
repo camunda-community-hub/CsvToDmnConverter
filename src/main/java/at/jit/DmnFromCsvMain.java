@@ -7,42 +7,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class DmnFromCsvMain {
-    public static void main(String[] args) {
+    public void run(final String[] args) {
+        if (args.length != 3) {
+            System.out.println("Usage: java -jar CsvToDmnConverter mode input-file output-file");
+        }
 
-        System.out.println("Usage:");
-        System.out.println("Enter 1 to convert a CSV to DMN");
-        System.out.println("Enter 2 to convert a DMN to CSV");
-        System.out.println();
+        final String mode = args[0].trim();
 
-        System.out.print("1/2: ");
-
-        String option = readInput();
-
-        if(option.equals("1")||option.equals("2")){
-            if(!fileExtensionValid(args[0], args[1], option)){
+        if(mode.equals("1")||mode.equals("2")){
+            if(!fileExtensionValid(args[1], args[2], mode)){
                 System.out.println("One of the entered file extensions is wrong, exiting program..");
                 return;
             }
-            if(option.equals("1")) {
+            if(mode.equals("1")) {
                 CsvReader csvReader = new CsvReader();
 
-                CsvPojo csvPojo = csvReader.readCsv(args[0]);
+                CsvPojo csvPojo = csvReader.readCsv(args[1]);
 
                 DmnCreator dmnCreator = new DmnCreator();
                 DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
 
                 DmnFileExporter dmnFileExporter = new DmnFileExporter();
-                dmnFileExporter.exportToDmnFile(dmnModelInstance, args[1]);
+                dmnFileExporter.exportToDmnFile(dmnModelInstance, args[2]);
             }
             else {
                 DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
-                dmnToCsvConverter.convertDmnToCsv(args[0], args[1]);
+                dmnToCsvConverter.convertDmnToCsv(args[1], args[2]);
             }
         }
         else {
             System.out.println("Entered option is not 1 or 2, exiting program..");
             return;
         }
+    }
+    public static void main(final String[] args) {
+        final DmnFromCsvMain app = new DmnFromCsvMain();
+        app.run(args);
     }
 
     private static String readInput(){

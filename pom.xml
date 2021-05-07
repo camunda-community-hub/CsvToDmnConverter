@@ -26,6 +26,12 @@
             <artifactId>camunda-dmn-model</artifactId>
             <version>7.14.0</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
