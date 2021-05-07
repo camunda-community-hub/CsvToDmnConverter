@@ -1,10 +1,7 @@
 package at.jit;
 
+import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class DmnFromCsvMain {
     public void run(final String[] args) {
@@ -14,27 +11,26 @@ public class DmnFromCsvMain {
 
         final String mode = args[0].trim();
 
-        if(mode.equals("1")||mode.equals("2")){
+        if(mode.equals(Modes.CSV_TO_DMN)||mode.equals("2")){
             final String inputFile = args[1];
             final String outputFile = args[2];
-            if(!fileExtensionValid(inputFile, outputFile, mode)){
+            if(!new FileExtensionsValidator().fileExtensionsValid(inputFile, outputFile, mode)){
                 System.out.println("One of the entered file extensions is wrong, exiting program..");
                 return;
             }
-            if(mode.equals("1")) {
-                CsvReader csvReader = new CsvReader();
+            if(mode.equals(Modes.CSV_TO_DMN)) {
+                final CsvReader csvReader = new CsvReader();
+                final CsvPojo csvPojo = csvReader.readCsv(inputFile);
 
-                CsvPojo csvPojo = csvReader.readCsv(args[1]);
+                final DmnCreator dmnCreator = new DmnCreator();
+                final DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
 
-                DmnCreator dmnCreator = new DmnCreator();
-                DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
-
-                DmnFileExporter dmnFileExporter = new DmnFileExporter();
-                dmnFileExporter.exportToDmnFile(dmnModelInstance, args[2]);
+                final DmnFileExporter dmnFileExporter = new DmnFileExporter();
+                dmnFileExporter.exportToDmnFile(dmnModelInstance, outputFile);
             }
             else {
                 DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
-                dmnToCsvConverter.convertDmnToCsv(args[1], args[2]);
+                dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile);
             }
         }
         else {
@@ -45,14 +41,5 @@ public class DmnFromCsvMain {
     public static void main(final String[] args) {
         final DmnFromCsvMain app = new DmnFromCsvMain();
         app.run(args);
-    }
-
-    private static boolean fileExtensionValid(String source, String destination, String option){
-        if(option.equals("1")){
-            return source.substring(source.lastIndexOf(".")+1).equals("csv") && destination.substring(destination.lastIndexOf(".")+1).equals("dmn");
-        }
-        else {
-            return source.substring(source.lastIndexOf(".")+1).equals("dmn") && destination.substring(destination.lastIndexOf(".")+1).equals("csv");
-        }
     }
 }
