@@ -1,6 +1,5 @@
 package at.jit;
 
-import org.apache.commons.io.FilenameUtils;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
 
 public class DmnFromCsvMain {

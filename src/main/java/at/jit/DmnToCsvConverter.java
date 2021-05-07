@@ -122,8 +122,10 @@ public class DmnToCsvConverter {
     }
 
     public void writeToFile(String csv, List<List<String>> csvData) {
+
         try (
-                Writer writer = Files.newBufferedWriter(Paths.get(new URI("file:///" + csv)));
+                //Writer writer = Files.newBufferedWriter(Paths.get(new URI("file:///" + csv)));
+                Writer writer = Files.newBufferedWriter(Paths.get(csv));
 
                 CSVWriter csvWriter = new CSVWriter(writer,
                         CSVWriter.DEFAULT_SEPARATOR,
