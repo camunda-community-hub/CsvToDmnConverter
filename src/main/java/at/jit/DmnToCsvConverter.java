@@ -4,11 +4,19 @@ import com.opencsv.CSVWriter;
 import org.camunda.bpm.model.dmn.Dmn;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
 import org.camunda.bpm.model.dmn.impl.instance.DecisionImpl;
-import org.camunda.bpm.model.dmn.instance.*;
+import org.camunda.bpm.model.dmn.instance.DecisionTable;
+import org.camunda.bpm.model.dmn.instance.Definitions;
+import org.camunda.bpm.model.dmn.instance.DmnElement;
+import org.camunda.bpm.model.dmn.instance.Input;
+import org.camunda.bpm.model.dmn.instance.InputEntry;
+import org.camunda.bpm.model.dmn.instance.InputExpression;
+import org.camunda.bpm.model.dmn.instance.Output;
+import org.camunda.bpm.model.dmn.instance.OutputEntry;
+import org.camunda.bpm.model.dmn.instance.Rule;
+import org.camunda.bpm.model.dmn.instance.Text;
 
 import java.io.File;
 import java.io.Writer;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -122,11 +130,8 @@ public class DmnToCsvConverter {
     }
 
     public void writeToFile(String csv, List<List<String>> csvData) {
-
         try (
-                //Writer writer = Files.newBufferedWriter(Paths.get(new URI("file:///" + csv)));
                 Writer writer = Files.newBufferedWriter(Paths.get(csv));
-
                 CSVWriter csvWriter = new CSVWriter(writer,
                         CSVWriter.DEFAULT_SEPARATOR,
                         CSVWriter.NO_QUOTE_CHARACTER,
