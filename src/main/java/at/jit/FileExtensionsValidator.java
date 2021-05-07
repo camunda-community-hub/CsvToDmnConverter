@@ -7,13 +7,7 @@ class FileExtensionsValidator {
     public boolean fileExtensionsValid(final String srcFileName,
                                        final String targetFileName,
                                        final String mode) {
-        if (StringUtils.isBlank(mode)) {
-            return false;
-        }
-        if (StringUtils.isBlank(srcFileName)) {
-            return false;
-        }
-        if (StringUtils.isBlank(targetFileName)) {
+        if (StringUtils.isBlank(mode) || StringUtils.isBlank(srcFileName) || StringUtils.isBlank(targetFileName)) {
             return false;
         }
         final String srcExtension = FilenameUtils.getExtension(srcFileName);
