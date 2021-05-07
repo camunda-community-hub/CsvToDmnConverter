@@ -98,7 +98,11 @@ class DmnCreator {
         }
     }
 
-    public void createRules(List<String> inRow, List<String> outRow, String annotation, List<String> inDataTypes, List<String> outDataTypes) {
+    public void createRules(final List<String> inRow,
+                            final List<String> outRow,
+                            final String annotation,
+                            final List<String> inDataTypes,
+                            final List<String> outDataTypes) {
         final Rule rule = modelInstance.newInstance(Rule.class);
         rule.setId(composeId(Converter.RULE_ID));
 

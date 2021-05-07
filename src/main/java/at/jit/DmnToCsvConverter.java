@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class DmnToCsvConverter {
-
     private List<List<String>> csvFormatArray;
 
     public DmnToCsvConverter() {
@@ -139,9 +138,7 @@ class DmnToCsvConverter {
                         CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                         CSVWriter.DEFAULT_LINE_END);
         ) {
-
             csvData.forEach(line -> csvWriter.writeNext(line.stream().toArray(String[]::new), false));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
