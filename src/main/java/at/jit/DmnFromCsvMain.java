@@ -15,7 +15,9 @@ public class DmnFromCsvMain {
         final String mode = args[0].trim();
 
         if(mode.equals("1")||mode.equals("2")){
-            if(!fileExtensionValid(args[1], args[2], mode)){
+            final String inputFile = args[1];
+            final String outputFile = args[2];
+            if(!fileExtensionValid(inputFile, outputFile, mode)){
                 System.out.println("One of the entered file extensions is wrong, exiting program..");
                 return;
             }
@@ -43,20 +45,6 @@ public class DmnFromCsvMain {
     public static void main(final String[] args) {
         final DmnFromCsvMain app = new DmnFromCsvMain();
         app.run(args);
-    }
-
-    private static String readInput(){
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(System.in));
-
-        String option = null;
-        try {
-            option = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return option;
     }
 
     private static boolean fileExtensionValid(String source, String destination, String option){
