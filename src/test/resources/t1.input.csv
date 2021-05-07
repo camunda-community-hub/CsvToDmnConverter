@@ -1,6 +1,7 @@
-1,DmnId,Title,Hit Policy,,,, 
-2,Input,Input,Input,Output,Output,,   
-3,ColumnName1,ColumnName1,ColumnName1,ColumnName1,ColumnName1,,
-4,string,integer,boolean,date,double,, 
-5,SomeString,301,true,date(“2020-12-31”),12.01,CommentsHere, 
-6,OtherString,1337,false,date(“2021-01-01”),123.45,CommentsHere ,
+DmnId,Title,Unique
+Input,Output,
+RiskLevel,Assignee,
+string,string,
+low,john,
+medium,mary,
+high,susie,

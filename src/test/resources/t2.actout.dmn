@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions id="someId" name="someName" namespace="http://camunda.org/schema/1.0/dmn" xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd">
+  <decision id="mnId" name="Title">
+    <decisionTable hitPolicy="UNIQUE" id="decisionTable">
+      <input id="Input_1" label="RiskLevel">
+        <inputExpression id="InputExpression_2" typeRef="string"/>
+      </input>
+      <output id="Output_3" label="Assignee" name="Assignee" typeRef="string"/>
+      <rule id="Rule_4">
+        <description/>
+        <inputEntry id="Input_5">
+          <text>"low"</text>
+        </inputEntry>
+        <outputEntry id="Output_6">
+          <text>"john"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_7">
+        <description/>
+        <inputEntry id="Input_8">
+          <text>"medium"</text>
+        </inputEntry>
+        <outputEntry id="Output_9">
+          <text>"mary"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_10">
+        <description/>
+        <inputEntry id="Input_11">
+          <text>"high"</text>
+        </inputEntry>
+        <outputEntry id="Output_12">
+          <text>"susie"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
