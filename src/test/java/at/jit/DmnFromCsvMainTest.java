@@ -48,4 +48,14 @@ public class DmnFromCsvMainTest {
         // Then
         assertTrue(FileUtils.contentEqualsIgnoreEOL(new File(EXP_CSV_RESULT_FILE), new File(ACT_CSV_RESULT_FILE), "UTF-8"));
     }
+
+    @Test
+    public void generateSampleDmn() {
+        new DmnFromCsvMain().run(new String[] {
+                Modes.CSV_TO_DMN,
+                "src/test/resources/input_template.csv",
+                "src/test/resources/input_template.dmn"
+        });
+    }
+
 }
