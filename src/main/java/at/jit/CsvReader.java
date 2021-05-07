@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvReader {
+class CsvReader {
     private int inEnd = 0;
     private int outEnd = 0;
 

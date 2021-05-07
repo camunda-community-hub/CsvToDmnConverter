@@ -33,8 +33,12 @@ public class FileExtensionsValidatorTest {
         return Arrays.asList(new Object[][] {
                 {CSV_TO_DMN, "someFile.csv", "someFile.dmn", true},
                 {CSV_TO_DMN, "someFile.CSV", "someFile.DMN", true},
+                {CSV_TO_DMN, "someFile.CSV", null, false},
+                {CSV_TO_DMN, null, "someFile.DMN", false},
                 {DMN_TO_CSV, "someFile.dmn", "someFile.csv", true},
                 {DMN_TO_CSV, "someFile.DMN", "someFile.CSV", true},
+                {DMN_TO_CSV, "someFile.DMN", null, false},
+                {DMN_TO_CSV, null, "someFile.CSV", false},
                 {null, "someFile.DMN", "someFile.CSV", false},
                 {"abrakadabra", "someFile.DMN", "someFile.CSV", false},
         });

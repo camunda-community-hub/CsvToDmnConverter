@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class DmnFileExporter {
+class DmnFileExporter {
     public void exportToDmnFile(DmnModelInstance dmnModelInstance, String path) {
         try (FileWriter fileWriter = new FileWriter(path)) {
             PrintWriter printWriter = new PrintWriter(fileWriter);

@@ -8,7 +8,7 @@ import org.camunda.bpm.model.dmn.instance.*;
 
 import java.util.List;
 
-public class DmnCreator {
+class DmnCreator {
     private DmnModelInstance modelInstance;
     private DecisionTable decisionTable;
     private SequenceGenerator sequenceGenerator;

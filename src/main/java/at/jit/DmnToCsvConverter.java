@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DmnToCsvConverter {
+class DmnToCsvConverter {
 
     private List<List<String>> csvFormatArray;
 
@@ -30,7 +30,7 @@ public class DmnToCsvConverter {
         this.csvFormatArray = new ArrayList<>();
     }
 
-    public void convertDmnToCsv(String dmnFile, String csv) {
+    public void convertDmnToCsv(final String dmnFile, final String csv) {
         DmnModelInstance readFile = Dmn.readModelFromFile(new File(dmnFile));
         Definitions def = readFile.getDefinitions();
         DecisionImpl decImpl = (DecisionImpl) new ArrayList(def.getDrgElements()).get(0);
@@ -44,13 +44,13 @@ public class DmnToCsvConverter {
         writeToFile(csv, csvFormatArray);
     }
 
-    private void setHeaders(DecisionImpl decImpl, DecisionTable decisionTable) {
-        List<String> idNameHit = new ArrayList<>();
+    private void setHeaders(final DecisionImpl decImpl, final DecisionTable decisionTable) {
+        final List<String> idNameHit = new ArrayList<>();
 
-        List<Rule> ruleList = new ArrayList<>(decisionTable.getRules());
+        final List<Rule> ruleList = new ArrayList<>(decisionTable.getRules());
 
-        List<Input> inputLabels = new ArrayList<>(decisionTable.getInputs());
-        List<Output> outputsLabels = new ArrayList<>(decisionTable.getOutputs());
+        final List<Input> inputLabels = new ArrayList<>(decisionTable.getInputs());
+        final List<Output> outputsLabels = new ArrayList<>(decisionTable.getOutputs());
 
         idNameHit.add(decImpl.getId());
         idNameHit.add(decImpl.getName());
@@ -58,40 +58,41 @@ public class DmnToCsvConverter {
 
         csvFormatArray.add(idNameHit);
 
-        List<String> inOutLabels = new ArrayList<>();
+        final List<String> inOutLabels = new ArrayList<>();
 
-        for (int i = 0; i < new ArrayList(ruleList.get(0).getInputEntries()).size(); i++) {
+        final Rule firstRuleList = ruleList.get(0);
+        for (int i = 0; i < firstRuleList.getInputEntries().size(); i++) {
             inOutLabels.add(Converter.INPUT);
         }
 
-        for (int i = 0; i < new ArrayList(ruleList.get(0).getOutputEntries()).size(); i++) {
+        for (int i = 0; i < firstRuleList.getOutputEntries().size(); i++) {
             inOutLabels.add(Converter.OUTPUT);
         }
 
         csvFormatArray.add(inOutLabels);
 
-        List<String> labels = new ArrayList<>();
+        final List<String> labels = new ArrayList<>();
 
-        for (Input input : inputLabels) {
+        for (final Input input : inputLabels) {
             labels.add(input.getLabel());
         }
 
-        for (Output output : outputsLabels) {
+        for (final Output output : outputsLabels) {
             labels.add(output.getLabel());
         }
 
         csvFormatArray.add(labels);
 
-        List<Input> inputColProperties = (List<Input>) decisionTable.getChildElementsByType(Input.class);
-        List<Output> outputColProperties = (List<Output>) decisionTable.getChildElementsByType(Output.class);
+        final List<Input> inputColProperties = (List<Input>) decisionTable.getChildElementsByType(Input.class);
+        final List<Output> outputColProperties = (List<Output>) decisionTable.getChildElementsByType(Output.class);
 
-        List<String> datatypes = new ArrayList<>();
+        final List<String> datatypes = new ArrayList<>();
 
-        for(Input input: inputColProperties){
-            datatypes.add(((List<InputExpression>)input.getChildElementsByType(InputExpression.class)).get(0).getTypeRef());
+        for (final Input input : inputColProperties) {
+            datatypes.add(((List<InputExpression>) input.getChildElementsByType(InputExpression.class)).get(0).getTypeRef());
         }
 
-        for(Output output: outputColProperties){
+        for (final Output output : outputColProperties) {
             datatypes.add(output.getTypeRef());
         }
 
@@ -99,17 +100,17 @@ public class DmnToCsvConverter {
     }
 
     private void setContent(List<Rule> ruleList) {
-        for (Rule rule : ruleList) {
-            List<InputEntry> inputEntryList = new ArrayList(rule.getInputEntries());
-            List<OutputEntry> outputEntryList = new ArrayList(rule.getOutputEntries());
+        for (final Rule rule : ruleList) {
+            final List<InputEntry> inputEntryList = new ArrayList(rule.getInputEntries());
+            final List<OutputEntry> outputEntryList = new ArrayList(rule.getOutputEntries());
 
-            List<String> singleRule = new ArrayList<>();
+            final List<String> singleRule = new ArrayList<>();
 
-            for (InputEntry inputEntry : inputEntryList) {
+            for (final InputEntry inputEntry : inputEntryList) {
                 setRuleElement(singleRule, inputEntry);
             }
 
-            for (OutputEntry outputEntry : outputEntryList) {
+            for (final OutputEntry outputEntry : outputEntryList) {
                 setRuleElement(singleRule, outputEntry);
             }
 
@@ -119,9 +120,9 @@ public class DmnToCsvConverter {
         }
     }
 
-    public void setRuleElement(List<String> singleRule, DmnElement entry) {
-        Text text = (Text) new ArrayList(entry.getChildElementsByType(Text.class)).get(0);
-        String textContent = text.getTextContent();
+    public void setRuleElement(final List<String> singleRule, final DmnElement entry) {
+        final Text text = (Text) new ArrayList(entry.getChildElementsByType(Text.class)).get(0);
+        final String textContent = text.getTextContent();
         if (textContent.startsWith("\"") && textContent.endsWith("\"")) {
             singleRule.add(textContent.substring(1, textContent.length() - 1));
         } else {
