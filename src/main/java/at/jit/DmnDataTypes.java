@@ -14,10 +14,6 @@ enum DmnDataTypes {
         this.value = value;
     }
 
-    public String value() {
-        return this.value;
-    }
-
     public static boolean dataTypeExists(String dataType) {
         for (DmnDataTypes dmnDataTypes : DmnDataTypes.values()) {
             if (dmnDataTypes.value().equals(dataType.toLowerCase())) {
@@ -25,5 +21,9 @@ enum DmnDataTypes {
             }
         }
         return false;
+    }
+
+    public String value() {
+        return this.value;
     }
 }

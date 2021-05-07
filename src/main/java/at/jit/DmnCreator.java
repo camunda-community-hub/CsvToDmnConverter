@@ -83,6 +83,7 @@ class DmnCreator {
             decisionTable.addChildElement(input);
         }
     }
+
     private String composeId(final String id) {
         return format("%s%d", id, sequenceGenerator.getNext());
     }

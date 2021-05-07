@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class DmnToCsvConverter {
-    private List<List<String>> csvFormatArray;
+    private final List<List<String>> csvFormatArray;
 
     public DmnToCsvConverter() {
         this.csvFormatArray = new ArrayList<>();
