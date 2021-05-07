@@ -30,12 +30,12 @@ class DmnToCsvConverter {
     }
 
     public void convertDmnToCsv(final String dmnFile, final String csv) {
-        DmnModelInstance readFile = Dmn.readModelFromFile(new File(dmnFile));
-        Definitions def = readFile.getDefinitions();
-        DecisionImpl decImpl = (DecisionImpl) new ArrayList(def.getDrgElements()).get(0);
-        DecisionTable decisionTable = (DecisionTable) new ArrayList(decImpl.getChildElementsByType(DecisionTable.class)).get(0);
+        final DmnModelInstance readFile = Dmn.readModelFromFile(new File(dmnFile));
+        final Definitions def = readFile.getDefinitions();
+        final DecisionImpl decImpl = (DecisionImpl) new ArrayList(def.getDrgElements()).get(0);
+        final DecisionTable decisionTable = (DecisionTable) new ArrayList(decImpl.getChildElementsByType(DecisionTable.class)).get(0);
 
-        List<Rule> ruleList = new ArrayList<>(decisionTable.getRules());
+        final List<Rule> ruleList = new ArrayList<>(decisionTable.getRules());
 
         setHeaders(decImpl, decisionTable);
         setContent(ruleList);
