@@ -24,10 +24,10 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
     static final String USAGE_MESSAGE = "usage: java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o\n" +
             "            outputFile\n" +
             "Either -c or -d must be provided.\n" +
-            " -c,--csv-to-dmn    Convert CSV to DMN\n" +
-            " -d,--dmn-to-csv    Convert DMN to CSV\n" +
-            " -i,--input-file    Input file (CSV or DMN)\n" +
-            " -o,--output-file   Output file (CSV or DMN)";
+            " -c,--csv-to-dmn          Convert CSV to DMN\n" +
+            " -d,--dmn-to-csv          Convert DMN to CSV\n" +
+            " -i,--input-file <arg>    Input file (CSV or DMN)\n" +
+            " -o,--output-file <arg>   Output file (CSV or DMN)";
 
     private final String[] args;
     private final String expectedErrorMessage;
