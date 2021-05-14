@@ -15,18 +15,17 @@ public class DmnFromCsvMain {
 
         final String mode = args[0].trim();
 
-        if (mode.equals(Modes.CSV_TO_DMN) || mode.equals("2")) {
-            final String inputFile = args[1];
-            final String outputFile = args[2];
-            if (!new FileExtensionsValidator().fileExtensionsValid(inputFile, outputFile, mode)) {
-                System.out.println("One of the entered file extensions is wrong, exiting program..");
-                return;
-            }
-            if (mode.equals(Modes.CSV_TO_DMN)) {
-                convertCsvToDmn(inputFile, outputFile);
-            } else {
-                convertDmnToCsv(inputFile, outputFile);
-            }
+        final String inputFile = args[1];
+        final String outputFile = args[2];
+        if (!new FileExtensionsValidator().fileExtensionsValid(inputFile, outputFile, mode)) {
+            System.out.println("One of the entered file extensions is wrong, exiting program..");
+            return;
+        }
+
+        if (Modes.CSV_TO_DMN.equals(mode)) {
+            convertCsvToDmn(inputFile, outputFile);
+        } else if (Modes.DMN_TO_CSV.equals(mode)) {
+            convertDmnToCsv(inputFile, outputFile);
         } else {
             System.out.println("Entered option is not 1 or 2, exiting program..");
             return;
