@@ -82,28 +82,34 @@ public class DmnFromCsvMain {
             return;
         }
 
-        // TODO: Check the validity of input and output files
-
-
-        if (args.length != 3) {
-            sysErr.println("Usage: java -jar CsvToDmnConverter mode input-file output-file");
-        }
-
-        final String mode = args[0].trim();
-
-        final String inputFile = args[1];
-        final String outputFile = args[2];
-        if (!new FileExtensionsValidator().fileExtensionsValid(inputFile, outputFile, mode)) {
-            sysErr.println("One of the entered file extensions is wrong, exiting program..");
+        if (!commandLine.hasOption(CLI_OPTION_INPUT_FILE)) {
+            sysErr.println("Input file not specified");
+            printUsageText(options);
             return;
         }
 
+        if (!commandLine.hasOption(CLI_OPTION_OUTPUT_FILE)) {
+            sysErr.println("Output file not specified");
+            printUsageText(options);
+            return;
+        }
+        final String mode = extractMode(commandLine);
+        final String inputFileName = commandLine.getOptionValue(CLI_OPTION_INPUT_FILE);
+        final String outputFileName = commandLine.getOptionValue(CLI_OPTION_OUTPUT_FILE);
+
+        // TODO: Check the validity of input and output files
+
+        final boolean fileExtensionsValid = new FileExtensionsValidator().fileExtensionsValid(inputFileName, outputFileName, mode);
+        if (!fileExtensionsValid) {
+            sysErr.println("One of the entered file extensions is wrong.");
+            return;
+        }
         if (Modes.CSV_TO_DMN.equals(mode)) {
-            convertCsvToDmn(inputFile, outputFile);
+            convertCsvToDmn(inputFileName, outputFileName);
         } else if (Modes.DMN_TO_CSV.equals(mode)) {
-            convertDmnToCsv(inputFile, outputFile);
+            convertDmnToCsv(inputFileName, outputFileName);
         } else {
-            sysErr.println("Entered option is not 1 or 2, exiting program..");
+            sysErr.println("Unexpected error");
             return;
         }
     }
@@ -128,5 +134,14 @@ public class DmnFromCsvMain {
         final HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("java -jar csv2dmn-converter.jar",
                 options);
+    }
+
+    String extractMode(final CommandLine commandLine) {
+        if (commandLine.hasOption(CLI_OPTION_DMN_TO_CSV)) {
+            return Modes.DMN_TO_CSV;
+        } else
+        {
+            return Modes.CSV_TO_DMN;
+        }
     }
 }
