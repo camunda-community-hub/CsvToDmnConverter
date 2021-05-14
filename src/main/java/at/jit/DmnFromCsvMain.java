@@ -46,10 +46,7 @@ public class DmnFromCsvMain {
             return;
         }
 
-        if (!commandLine.hasOption(CLI_OPTION_DMN_TO_CSV) &&
-                !commandLine.hasOption(CLI_OPTION_CSV_TO_DMN)) {
-            sysErr.println("Mode (CSV to DMN, DMN to CSV) not specified");
-            printUsageText(options);
+        if (modeNotSpecified(commandLine, options)) {
             return;
         }
 
@@ -117,6 +114,16 @@ public class DmnFromCsvMain {
         options.addOption(inputFileOpt);
         options.addOption(outputFileOpt);
         return options;
+    }
+
+    boolean modeNotSpecified(final CommandLine commandLine, final Options options) {
+        if (!commandLine.hasOption(CLI_OPTION_DMN_TO_CSV) &&
+                !commandLine.hasOption(CLI_OPTION_CSV_TO_DMN)) {
+            sysErr.println("Mode (CSV to DMN, DMN to CSV) not specified");
+            printUsageText(options);
+            return true;
+        }
+        return false;
     }
 
     void convertDmnToCsv(String inputFile, String outputFile) {
