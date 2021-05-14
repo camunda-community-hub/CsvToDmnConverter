@@ -35,14 +35,9 @@ public class DmnFromCsvMain {
 
     public void run(final String[] args) {
         final Options options = createCommandLineParsingOptions();
+        final CommandLine commandLine = parseCommandLine(args, options);
 
-        final CommandLineParser parser = new DefaultParser();
-        CommandLine commandLine = null;
-        try {
-            commandLine = parser.parse(options, args);
-        } catch (final ParseException e) {
-            sysErr.println(String.format("Invalid input: %s", e.getMessage()));
-            printUsageText(options);
+        if (commandLine == null) {
             return;
         }
 
@@ -50,28 +45,22 @@ public class DmnFromCsvMain {
             return;
         }
 
-        if (!commandLine.hasOption(CLI_OPTION_INPUT_FILE)) {
-            sysErr.println("Input file not specified");
-            printUsageText(options);
+        if (fileNameNotSpecified(commandLine, options, CLI_OPTION_INPUT_FILE, "Input file not specified")) {
             return;
         }
 
-        if (!commandLine.hasOption(CLI_OPTION_OUTPUT_FILE)) {
-            sysErr.println("Output file not specified");
-            printUsageText(options);
+        if (fileNameNotSpecified(commandLine, options, CLI_OPTION_OUTPUT_FILE, "Output file not specified")) {
             return;
         }
+
         final String mode = extractMode(commandLine);
         final String inputFileName = commandLine.getOptionValue(CLI_OPTION_INPUT_FILE);
         final String outputFileName = commandLine.getOptionValue(CLI_OPTION_OUTPUT_FILE);
 
-        // TODO: Check the validity of input and output files
-
-        final boolean fileExtensionsValid = new FileExtensionsValidator().fileExtensionsValid(inputFileName, outputFileName, mode);
-        if (!fileExtensionsValid) {
-            sysErr.println("One of the entered file extensions is wrong.");
+        if (fileExtensionsInvalid(inputFileName, outputFileName, mode)) {
             return;
         }
+
         if (Modes.CSV_TO_DMN.equals(mode)) {
             convertCsvToDmn(inputFileName, outputFileName);
         } else if (Modes.DMN_TO_CSV.equals(mode)) {
@@ -116,10 +105,39 @@ public class DmnFromCsvMain {
         return options;
     }
 
+    CommandLine parseCommandLine(final String[] args, final Options options) {
+        final CommandLineParser parser = new DefaultParser();
+        try {
+            return parser.parse(options, args);
+        } catch (final ParseException e) {
+            sysErr.println(String.format("Invalid input: %s", e.getMessage()));
+            printUsageText(options);
+            return null;
+        }
+    }
+
+    boolean fileExtensionsInvalid(final String inputFileName, final String outputFileName, final String mode) {
+        final boolean fileExtensionsValid = new FileExtensionsValidator().fileExtensionsValid(inputFileName, outputFileName, mode);
+        if (!fileExtensionsValid) {
+            sysErr.println("One of the entered file extensions is wrong.");
+            return true;
+        }
+        return false;
+    }
+
     boolean modeNotSpecified(final CommandLine commandLine, final Options options) {
         if (!commandLine.hasOption(CLI_OPTION_DMN_TO_CSV) &&
                 !commandLine.hasOption(CLI_OPTION_CSV_TO_DMN)) {
             sysErr.println("Mode (CSV to DMN, DMN to CSV) not specified");
+            printUsageText(options);
+            return true;
+        }
+        return false;
+    }
+
+    boolean fileNameNotSpecified(final CommandLine commandLine, final Options options, final String optionName, final String errorMessage) {
+        if (!commandLine.hasOption(optionName)) {
+            sysErr.println(errorMessage);
             printUsageText(options);
             return true;
         }
