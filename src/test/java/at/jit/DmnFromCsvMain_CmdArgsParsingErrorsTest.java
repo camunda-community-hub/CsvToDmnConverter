@@ -43,7 +43,16 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
                 {new String[]{"-i", "inputFile.csv", "-o", "outputFile.csv"},
                         "Mode (CSV to DMN, DMN to CSV) not specified"},
                 {new String[] {"-o", "outputFile.csv"}, "Invalid input: Missing required option: i"},
-                {new String[] {"-i", "inputFile.csv"}, "Invalid input: Missing required option: o"}
+                {new String[] {"-i", "inputFile.csv"}, "Invalid input: Missing required option: o"},
+
+                {new String[]{"-d", "-i", "inputFile.csv", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
+                {new String[]{"-d", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
+                {new String[]{"-d", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
+
+                {new String[]{"-c", "-i", "inputFile.dmn", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
+                {new String[]{"-c", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
+                {new String[]{"-c", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
+
         });
     }
 
@@ -55,11 +64,11 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
         final DmnFromCsvMain app = spy(new DmnFromCsvMain(sysErr));
 
         // When
-        app.run(new String[]{"-i", "inputFile.csv"});
+        app.run(args);
 
         // Then
         final String actualOutput = extractAndNormalizeActualOutput(baos);
-        final String expectedOutput = composeExpectedErrorOutput("Invalid input: Missing required option: o");
+        final String expectedOutput = composeExpectedErrorOutput(expectedErrorMessage);
         assertEquals(expectedOutput, actualOutput);
         verify(sysErr).flush();
         verify(app, never()).convertCsvToDmn(anyString(), any());

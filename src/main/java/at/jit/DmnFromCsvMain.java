@@ -12,6 +12,8 @@ import org.camunda.bpm.model.dmn.DmnModelInstance;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+import static java.lang.String.format;
+
 public class DmnFromCsvMain {
     static final String CLI_OPTION_CSV_TO_DMN = "c";
     static final String CLI_OPTION_DMN_TO_CSV = "d";
@@ -48,7 +50,7 @@ public class DmnFromCsvMain {
         final String inputFileName = commandLine.getOptionValue(CLI_OPTION_INPUT_FILE);
         final String outputFileName = commandLine.getOptionValue(CLI_OPTION_OUTPUT_FILE);
 
-        if (fileExtensionsInvalid(inputFileName, outputFileName, mode)) {
+        if (fileExtensionsInvalid(inputFileName, outputFileName, mode, options)) {
             return;
         }
 
@@ -101,16 +103,17 @@ public class DmnFromCsvMain {
         try {
             return parser.parse(options, args);
         } catch (final ParseException e) {
-            sysErr.println(String.format("Invalid input: %s", e.getMessage()));
+            sysErr.println(format("Invalid input: %s", e.getMessage()));
             printUsageText(options);
             return null;
         }
     }
 
-    boolean fileExtensionsInvalid(final String inputFileName, final String outputFileName, final String mode) {
+    boolean fileExtensionsInvalid(final String inputFileName, final String outputFileName, final String mode, final Options options) {
         final boolean fileExtensionsValid = new FileExtensionsValidator().fileExtensionsValid(inputFileName, outputFileName, mode);
         if (!fileExtensionsValid) {
             sysErr.println("One of the entered file extensions is wrong.");
+            printUsageText(options);
             return true;
         }
         return false;
