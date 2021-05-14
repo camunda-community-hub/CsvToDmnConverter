@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static at.jit.Utils.extractAndNormalizeActualOutput;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -44,15 +45,18 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
                         "Mode (CSV to DMN, DMN to CSV) not specified"},
                 {new String[] {"-o", "outputFile.csv"}, "Invalid input: Missing required option: i"},
                 {new String[] {"-i", "inputFile.csv"}, "Invalid input: Missing required option: o"},
-
                 {new String[]{"-d", "-i", "inputFile.csv", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
                 {new String[]{"-d", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
                 {new String[]{"-d", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
-
+                {new String[]{"--dmn-to-csv", "-i", "inputFile.csv", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
+                {new String[]{"--dmn-to-csv", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
+                {new String[]{"--dmn-to-csv", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
                 {new String[]{"-c", "-i", "inputFile.dmn", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
                 {new String[]{"-c", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
                 {new String[]{"-c", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
-
+                {new String[]{"--csv-to-dmn", "-i", "inputFile.dmn", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
+                {new String[]{"--csv-to-dmn", "-i", "inputFile.dmn", "-o", "outputFile.dmn"}, "One of the entered file extensions is wrong."},
+                {new String[]{"--csv-to-dmn", "-i", "inputFile.csv", "-o", "outputFile.csv"}, "One of the entered file extensions is wrong."},
         });
     }
 
@@ -74,9 +78,6 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
         verify(app, never()).convertCsvToDmn(anyString(), any());
         verify(app, never()).convertDmnToCsv(anyString(), anyString());
 
-    }
-    private String extractAndNormalizeActualOutput(final ByteArrayOutputStream baos) {
-        return baos.toString().trim().replaceAll("\\r\\n?", "\n");
     }
 
     private String composeExpectedErrorOutput(final String messageAtTheTop) {

@@ -82,12 +82,14 @@ public class DmnFromCsvMain {
         final Option inputFileOpt = Option.builder(CLI_OPTION_INPUT_FILE)
                 .required(true)
                 .longOpt("input-file")
+                .numberOfArgs(1)
                 .desc("Input file (CSV or DMN)")
                 .build();
 
         final Option outputFileOpt = Option.builder(CLI_OPTION_OUTPUT_FILE)
                 .required(true)
                 .longOpt("output-file")
+                .numberOfArgs(1)
                 .desc("Output file (CSV or DMN)")
                 .build();
 
