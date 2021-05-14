@@ -44,14 +44,6 @@ public class DmnFromCsvMain {
             return;
         }
 
-        if (fileNameNotSpecified(commandLine, options, CLI_OPTION_INPUT_FILE, "Input file not specified")) {
-            return;
-        }
-
-        if (fileNameNotSpecified(commandLine, options, CLI_OPTION_OUTPUT_FILE, "Output file not specified")) {
-            return;
-        }
-
         final String mode = extractMode(commandLine);
         final String inputFileName = commandLine.getOptionValue(CLI_OPTION_INPUT_FILE);
         final String outputFileName = commandLine.getOptionValue(CLI_OPTION_OUTPUT_FILE);
@@ -134,16 +126,7 @@ public class DmnFromCsvMain {
         return false;
     }
 
-    boolean fileNameNotSpecified(final CommandLine commandLine, final Options options, final String optionName, final String errorMessage) {
-        if (!commandLine.hasOption(optionName)) {
-            sysErr.println(errorMessage);
-            printUsageText(options);
-            return true;
-        }
-        return false;
-    }
-
-    void convertDmnToCsv(String inputFile, String outputFile) {
+     void convertDmnToCsv(String inputFile, String outputFile) {
         DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
         dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile);
     }

@@ -61,7 +61,43 @@ public class DmnFromCsvMain_CmdArgsParsingTest {
         verify(app, never()).convertDmnToCsv(anyString(), anyString());
     }
 
+    @Test
+    public void givenNoInputFile_whenRun_thenPrintCorrectErrorMessage() throws IOException {
+        // Given
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final PrintStream sysErr = spy(new PrintStream(baos, true, StandardCharsets.UTF_8.name()));
+        final DmnFromCsvMain app = spy(new DmnFromCsvMain(sysErr));
 
+        // When
+        app.run(new String[]{"-o", "outputFile.csv"});
+
+        // Then
+        final String actualOutput = extractAndNormalizeActualOutput(baos);
+        final String expectedOutput = composeExpectedErrorOutput("Invalid input: Missing required option: i");
+        assertEquals(expectedOutput, actualOutput);
+        verify(sysErr).flush();
+        verify(app, never()).convertCsvToDmn(anyString(), any());
+        verify(app, never()).convertDmnToCsv(anyString(), anyString());
+    }
+
+    @Test
+    public void givenNoOutputFile_whenRun_thenPrintCorrectErrorMessage() throws IOException {
+        // Given
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final PrintStream sysErr = spy(new PrintStream(baos, true, StandardCharsets.UTF_8.name()));
+        final DmnFromCsvMain app = spy(new DmnFromCsvMain(sysErr));
+
+        // When
+        app.run(new String[]{"-i", "inputFile.csv"});
+
+        // Then
+        final String actualOutput = extractAndNormalizeActualOutput(baos);
+        final String expectedOutput = composeExpectedErrorOutput("Invalid input: Missing required option: o");
+        assertEquals(expectedOutput, actualOutput);
+        verify(sysErr).flush();
+        verify(app, never()).convertCsvToDmn(anyString(), any());
+        verify(app, never()).convertDmnToCsv(anyString(), anyString());
+    }
 
     private String extractAndNormalizeActualOutput(final ByteArrayOutputStream baos) {
         return baos.toString().trim().replaceAll("\\r\\n?", "\n");
