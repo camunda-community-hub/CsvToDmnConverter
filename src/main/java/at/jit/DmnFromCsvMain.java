@@ -34,36 +34,7 @@ public class DmnFromCsvMain {
     }
 
     public void run(final String[] args) {
-        final Options options = new Options();
-
-        final Option csvToDmn = Option.builder(CLI_OPTION_CSV_TO_DMN)
-                .required(false)
-                .longOpt("csv-to-dmn")
-                .desc("Convert CSV to DMN")
-                .build();
-
-        final Option dmnToCsv = Option.builder(CLI_OPTION_DMN_TO_CSV)
-                .required(false)
-                .longOpt("dmn-to-csv")
-                .desc("Convert DMN to CSV")
-                .build();
-
-        final Option inputFileOpt = Option.builder(CLI_OPTION_INPUT_FILE)
-                .required(true)
-                .longOpt("input-file")
-                .desc("Input file (CSV or DMN)")
-                .build();
-
-        final Option outputFileOpt = Option.builder(CLI_OPTION_OUTPUT_FILE)
-                .required(true)
-                .longOpt("output-file")
-                .desc("Output file (CSV or DMN)")
-                .build();
-
-        options.addOption(csvToDmn);
-        options.addOption(dmnToCsv);
-        options.addOption(inputFileOpt);
-        options.addOption(outputFileOpt);
+        final Options options = createCommandLineParsingOptions();
 
         final CommandLineParser parser = new DefaultParser();
         CommandLine commandLine = null;
@@ -112,6 +83,40 @@ public class DmnFromCsvMain {
             sysErr.println("Unexpected error");
             return;
         }
+    }
+
+    Options createCommandLineParsingOptions() {
+        final Options options = new Options();
+
+        final Option csvToDmn = Option.builder(CLI_OPTION_CSV_TO_DMN)
+                .required(false)
+                .longOpt("csv-to-dmn")
+                .desc("Convert CSV to DMN")
+                .build();
+
+        final Option dmnToCsv = Option.builder(CLI_OPTION_DMN_TO_CSV)
+                .required(false)
+                .longOpt("dmn-to-csv")
+                .desc("Convert DMN to CSV")
+                .build();
+
+        final Option inputFileOpt = Option.builder(CLI_OPTION_INPUT_FILE)
+                .required(true)
+                .longOpt("input-file")
+                .desc("Input file (CSV or DMN)")
+                .build();
+
+        final Option outputFileOpt = Option.builder(CLI_OPTION_OUTPUT_FILE)
+                .required(true)
+                .longOpt("output-file")
+                .desc("Output file (CSV or DMN)")
+                .build();
+
+        options.addOption(csvToDmn);
+        options.addOption(dmnToCsv);
+        options.addOption(inputFileOpt);
+        options.addOption(outputFileOpt);
+        return options;
     }
 
     void convertDmnToCsv(String inputFile, String outputFile) {
