@@ -10,6 +10,7 @@ import org.apache.commons.cli.ParseException;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
 
 public class DmnFromCsvMain {
     static final String CLI_OPTION_CSV_TO_DMN = "c";
@@ -17,15 +18,13 @@ public class DmnFromCsvMain {
     static final String CLI_OPTION_INPUT_FILE = "i";
     static final String CLI_OPTION_OUTPUT_FILE = "o";
     private final PrintStream sysErr;
-    private final PrintStream sysOut;
 
     public DmnFromCsvMain() {
-        this(System.err, System.out);
+        this(System.err);
     }
 
-    DmnFromCsvMain(final PrintStream sysErr, final PrintStream sysOut) {
+    DmnFromCsvMain(final PrintStream sysErr) {
         this.sysErr = sysErr;
-        this.sysOut = sysOut;
     }
 
     public static void main(final String[] args) {
@@ -162,8 +161,9 @@ public class DmnFromCsvMain {
 
     void printUsageText(final Options options) {
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("java -jar csv2dmn-converter.jar",
-                options);
+        final PrintWriter printWriter = new PrintWriter(sysErr);
+        formatter.printHelp(printWriter, HelpFormatter.DEFAULT_WIDTH, "java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o outputFile", "Either -c or -d must be provided.", options, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD, "");
+        printWriter.flush();
     }
 
     String extractMode(final CommandLine commandLine) {
