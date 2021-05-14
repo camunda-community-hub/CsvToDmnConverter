@@ -39,7 +39,11 @@ public class DmnFromCsvMain_CmdArgsParsingTest {
     public static Collection testData() {
         return Arrays.asList(new Object[][]{
                 {new String[]{"-c", "-i", "inputFile.csv", "-o", "outputFile.dmn"}, true, false, "inputFile.csv", "outputFile.dmn"},
+                {new String[]{"--csv-to-dmn", "-i", "inputFile.csv", "-o", "outputFile.dmn"}, true, false, "inputFile.csv", "outputFile.dmn"},
+                {new String[]{"-c", "-i", "inputFile.CSV", "-o", "outputFile.DMN"}, true, false, "inputFile.CSV", "outputFile.DMN"},
                 {new String[]{"-d", "-i", "inputFile.dmn", "-o", "outputFile.csv"}, false, true, "inputFile.dmn", "outputFile.csv"},
+                {new String[]{"-d", "-i", "inputFile.DMN", "-o", "outputFile.CSV"}, false, true, "inputFile.DMN", "outputFile.CSV"},
+                {new String[]{"--dmn-to-csv", "--input-file", "inputFile.dmn", "--output-file", "outputFile.csv"}, false, true, "inputFile.dmn", "outputFile.csv"},
         });
     }
 
