@@ -23,21 +23,29 @@ public class DmnFromCsvMain {
                 return;
             }
             if (mode.equals(Modes.CSV_TO_DMN)) {
-                final CsvReader csvReader = new CsvReader();
-                final CsvPojo csvPojo = csvReader.readCsv(inputFile);
-
-                final DmnCreator dmnCreator = new DmnCreator();
-                final DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
-
-                final DmnFileExporter dmnFileExporter = new DmnFileExporter();
-                dmnFileExporter.exportToDmnFile(dmnModelInstance, outputFile);
+                convertCsvToDmn(inputFile, outputFile);
             } else {
-                DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
-                dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile);
+                convertDmnToCsv(inputFile, outputFile);
             }
         } else {
             System.out.println("Entered option is not 1 or 2, exiting program..");
             return;
         }
+    }
+
+    void convertDmnToCsv(String inputFile, String outputFile) {
+        DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
+        dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile);
+    }
+
+    void convertCsvToDmn(String inputFile, String outputFile) {
+        final CsvReader csvReader = new CsvReader();
+        final CsvPojo csvPojo = csvReader.readCsv(inputFile);
+
+        final DmnCreator dmnCreator = new DmnCreator();
+        final DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
+
+        final DmnFileExporter dmnFileExporter = new DmnFileExporter();
+        dmnFileExporter.exportToDmnFile(dmnModelInstance, outputFile);
     }
 }
