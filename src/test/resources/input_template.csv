@@ -1,0 +1,8 @@
+DmnId,Title,Unique, 
+Input,Input,Output,Output
+Input1,Input2,Output1,Output2
+string,string,string,string
+input1Value1,input2Value1,output1Value1,output2Value1
+input1Value2,input2Value2,output1Value2,output2Value2
+input1Value3,input2Value3,output1Value3,output2Value3
+input1Value4,input2Value4,output1Value4,output2Value4

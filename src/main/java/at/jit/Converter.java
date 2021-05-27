@@ -1,6 +1,6 @@
 package at.jit;
 
-public class Converter {
+class Converter {
     public static final String OUTPUT = "Output";
     public static final String INPUT = "Input";
 

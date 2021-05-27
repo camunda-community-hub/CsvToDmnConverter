@@ -4,7 +4,7 @@ import org.camunda.bpm.model.dmn.HitPolicy;
 
 import java.util.List;
 
-public class CsvPojo {
+class CsvPojo {
     private String dmnId;
     private String dmnTitle;
     private HitPolicy hitPolicy;

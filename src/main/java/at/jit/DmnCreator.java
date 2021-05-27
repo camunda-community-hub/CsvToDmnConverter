@@ -2,13 +2,26 @@ package at.jit;
 
 import at.jit.SequenceGenerator.SequenceGenerator;
 import at.jit.SequenceGenerator.SequenceGeneratorImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.model.dmn.Dmn;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.instance.*;
+import org.camunda.bpm.model.dmn.instance.Decision;
+import org.camunda.bpm.model.dmn.instance.DecisionTable;
+import org.camunda.bpm.model.dmn.instance.Definitions;
+import org.camunda.bpm.model.dmn.instance.Description;
+import org.camunda.bpm.model.dmn.instance.Input;
+import org.camunda.bpm.model.dmn.instance.InputEntry;
+import org.camunda.bpm.model.dmn.instance.InputExpression;
+import org.camunda.bpm.model.dmn.instance.Output;
+import org.camunda.bpm.model.dmn.instance.OutputEntry;
+import org.camunda.bpm.model.dmn.instance.Rule;
+import org.camunda.bpm.model.dmn.instance.Text;
 
 import java.util.List;
 
-public class DmnCreator {
+import static java.lang.String.format;
+
+class DmnCreator {
     private DmnModelInstance modelInstance;
     private DecisionTable decisionTable;
     private SequenceGenerator sequenceGenerator;
@@ -21,11 +34,11 @@ public class DmnCreator {
         createInputHeaders(csvPojo.getInColName(), csvPojo.getInColDataType());
         createOutputHeaders(csvPojo.getOutColName(), csvPojo.getOutColDataType());
 
-        List<List<String>> inData = csvPojo.getInData();
-        List<List<String>> outData = csvPojo.getOutData();
-        List<String> annotations = csvPojo.getRowAnnotation();
+        final List<List<String>> inData = csvPojo.getInData();
+        final List<List<String>> outData = csvPojo.getOutData();
+        final List<String> annotations = csvPojo.getRowAnnotation();
 
-        int entries = inData.size();
+        final int entries = inData.size();
 
         if (inData.size() == outData.size()) {
             for (int i = 0; i < entries; i++) {
@@ -40,13 +53,13 @@ public class DmnCreator {
 
     public void initializeBasicDmnModel(CsvPojo csvPojo) {
         modelInstance = Dmn.createEmptyModel();
-        Definitions definitions = modelInstance.newInstance(Definitions.class);
+        final Definitions definitions = modelInstance.newInstance(Definitions.class);
         definitions.setNamespace("http://camunda.org/schema/1.0/dmn");
         definitions.setName(Converter.DMN_NAME);
         definitions.setId(Converter.DMN_ID);
         modelInstance.setDefinitions(definitions);
 
-        Decision decision = modelInstance.newInstance(Decision.class);
+        final Decision decision = modelInstance.newInstance(Decision.class);
 
         decision.setId(csvPojo.getDmnId().substring(1)); //here a substring is mandatory otherwise there will be an error validating the DMN, somehow the CSV reader reads some character into the variable at index 0
         decision.setName(csvPojo.getDmnTitle());
@@ -60,8 +73,8 @@ public class DmnCreator {
 
     public void createInputHeaders(List<String> labels, List<String> dataTypes) {
         for (int i = 0; i < labels.size(); i++) {
-            Input input = modelInstance.newInstance(Input.class);
-            input.setId(Converter.INPUT_ID + sequenceGenerator.getNext());
+            final Input input = modelInstance.newInstance(Input.class);
+            input.setId(composeId(Converter.INPUT_ID));
             input.setLabel(labels.get(i));
             InputExpression inputExpression = modelInstance.newInstance(InputExpression.class);
             inputExpression.setId(Converter.INPUT_EXPRESSION_ID + sequenceGenerator.getNext());
@@ -71,9 +84,13 @@ public class DmnCreator {
         }
     }
 
+    private String composeId(final String id) {
+        return format("%s%d", id, sequenceGenerator.getNext());
+    }
+
     public void createOutputHeaders(List<String> labels, List<String> dataTypes) {
         for (int i = 0; i < labels.size(); i++) {
-            Output output = modelInstance.newInstance(Output.class);
+            final Output output = modelInstance.newInstance(Output.class);
             output.setId(Converter.OUTPUT_ID + sequenceGenerator.getNext());
             output.setLabel(labels.get(i));
             output.setName(labels.get(i));
@@ -82,25 +99,31 @@ public class DmnCreator {
         }
     }
 
-    public void createRules(List<String> inRow, List<String> outRow, String annotation, List<String> inDataTypes, List<String> outDataTypes) {
-        Rule rule = modelInstance.newInstance(Rule.class);
-        rule.setId(Converter.RULE_ID + sequenceGenerator.getNext());
+    public void createRules(final List<String> inRow,
+                            final List<String> outRow,
+                            final String annotation,
+                            final List<String> inDataTypes,
+                            final List<String> outDataTypes) {
+        final Rule rule = modelInstance.newInstance(Rule.class);
+        rule.setId(composeId(Converter.RULE_ID));
 
         //section for creating the input of the rule
         for (int i = 0; i < inRow.size(); i++) {
-            Text inputText = modelInstance.newInstance(Text.class);
-            if (inDataTypes.get(i).equals(DmnDataTypes.STRING.value())) {
-                if (!inRow.get(i).equals("")) {
-                    inputText.setTextContent("\"" + inRow.get(i) + "\"");
+            final Text inputText = modelInstance.newInstance(Text.class);
+            final String inRowText = inRow.get(i);
+            final String curDataType = inDataTypes.get(i);
+            if (curDataType.equals(DmnDataTypes.STRING.value())) {
+                if (!StringUtils.isBlank(inRowText)) {
+                    inputText.setTextContent(format("\"%s\"", inRowText));
                 } else {
                     inputText.setTextContent("");
                 }
             } else {
-                inputText.setTextContent(inRow.get(i));
+                inputText.setTextContent(inRowText);
             }
 
-            InputEntry inputEntry = modelInstance.newInstance(InputEntry.class);
-            inputEntry.setId(Converter.INPUT_ID + sequenceGenerator.getNext());
+            final InputEntry inputEntry = modelInstance.newInstance(InputEntry.class);
+            inputEntry.setId(composeId(Converter.INPUT_ID));
             inputEntry.addChildElement(inputText);
 
             rule.addChildElement(inputEntry);
@@ -119,14 +142,14 @@ public class DmnCreator {
                 outputText.setTextContent(outRow.get(i));
             }
 
-            OutputEntry outputEntry = modelInstance.newInstance(OutputEntry.class);
-            outputEntry.setId(Converter.OUTPUT_ID + sequenceGenerator.getNext());
+            final OutputEntry outputEntry = modelInstance.newInstance(OutputEntry.class);
+            outputEntry.setId(composeId(Converter.OUTPUT_ID));
             outputEntry.addChildElement(outputText);
 
             rule.addChildElement(outputEntry);
         }
 
-        Description description = modelInstance.newInstance(Description.class);
+        final Description description = modelInstance.newInstance(Description.class);
         description.setTextContent(annotation);
         rule.setDescription(description);
 
