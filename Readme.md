@@ -16,13 +16,13 @@ Either -c or -d must be provided.\
 
 ## Example
 Your CSV-File (values separated with comma) should look like this (further explanation below)
-![Origin CSV] [OriginCSV.PNG]
+![Origin CSV][origin-csv]
 
 Then on your .jar file in your target folder, which you got from compiling it with Maven run this command:
-![Command] [command]
+![Command][command]
 
 Your outcome should be following:
-![Outcome DMN] [outcome-dmn]
+![Outcome DMN][outcome-dmn]
 
 
 ## Layout of a compatible file
