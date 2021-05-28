@@ -116,6 +116,7 @@ Converts and exports a DMN to a Csv in the format from above.
 
 ## Contributors
 * Clemens Zumpf
+* Dmitrii Pisarenko
 
 ## Sponsor
 "J-IT" IT-Dienstleistungs GesmbH
