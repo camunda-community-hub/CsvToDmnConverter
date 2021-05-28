@@ -3,12 +3,27 @@
 The purpose of this program is to convert a CSV file to a DMN table and vice versa. This enables you to use e.g. Excel functions to enter information into the DMN table.
 
 ## How does it work?
-It is reading the CSV, which has to be in a particular layout, into an object, this is then creating a `DmnModelInstance` (class provided by Camunda), this instance is then exported to a DMN file.
-You can enter the path of the import and the export file directly to the CLI arguments when you call the provided main method. First argument is the source of the CSV file and second argument is the destination of the DMN file.
-In addition to that it is also providing the feature to create a CSV from a DMN file. Therefore, just for a showcase, you can enter a 3rd parameter while running the program. This is the destination in which the CSV will be exported to.
+The program is reading the CSV, which has to be in a particular layout, into an object, this is then creating a `DmnModelInstance` (class provided by Camunda), this instance is then exported to a DMN file.
+On your .jar file (located in the target folder), which you got from compiling the project with maven, run following command:
 
-## How can I use it?
-The easiest way to run it, is to execute the main class `DmnFromCsvMain`. Make sure you have entered the CLI arguments. First argument is the source file and second argument is the destination file (doen't have to exist, it will be created). Now when you run the main you can choose between DMN to CSV or vice versa. Make sure your file extensions are right.
+`java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o outputFile`
+
+Either -c or -d must be provided.\
+`-c,--csv-to-dmn          Convert CSV to DMN`\
+`-d,--dmn-to-csv          Convert DMN to CSV`\
+`-i,--input-file <arg>    Input file (CSV or DMN)`\
+`-o,--output-file <arg>   Output file (CSV or DMN)`
+
+## Example
+Your CSV-File (values separated with comma) should look like this (further explanation below)
+![Origin CSV] [origin-csv]
+
+Then on your .jar file in your target folder, which you got from compiling it with Maven run this command:
+![Command] [command]
+
+Your outcome should be following:
+![Outcome DMN] [outcome-dmn]
+
 
 ## Layout of a compatible file
 
@@ -116,3 +131,6 @@ Austria
 ![JIT logo][logo]
 
 [logo]: docs/jit_logo.png "JIT Logo"
+[origin-csv]: docs/OriginCSV.PNG "Origin CSV"
+[command]: docs/Command.PNG "Origin CSV"
+[outcome-dmn]: docs/OutcomeDMN.PNG "Origin CSV"
