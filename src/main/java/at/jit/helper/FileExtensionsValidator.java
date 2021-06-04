@@ -1,9 +1,10 @@
-package at.jit;
+package at.jit.helper;
 
+import at.jit.constants.Modes;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-class FileExtensionsValidator {
+public class FileExtensionsValidator {
     public boolean fileExtensionsValid(final String srcFileName,
                                        final String targetFileName,
                                        final String mode) {

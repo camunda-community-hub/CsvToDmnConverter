@@ -1,5 +1,6 @@
 package at.jit;
 
+import at.jit.helper.FileExtensionsValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -7,8 +8,8 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static at.jit.Modes.CSV_TO_DMN;
-import static at.jit.Modes.DMN_TO_CSV;
+import static at.jit.constants.Modes.CSV_TO_DMN;
+import static at.jit.constants.Modes.DMN_TO_CSV;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)

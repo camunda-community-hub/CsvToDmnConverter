@@ -1,5 +1,6 @@
 package at.jit;
 
+import at.jit.entity.CsvPojo;
 import org.camunda.bpm.model.dmn.HitPolicy;
 import org.junit.Test;
 import org.junit.runner.RunWith;

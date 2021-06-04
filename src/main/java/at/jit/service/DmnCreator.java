@@ -1,7 +1,10 @@
-package at.jit;
+package at.jit.service;
 
-import at.jit.SequenceGenerator.SequenceGenerator;
-import at.jit.SequenceGenerator.SequenceGeneratorImpl;
+import at.jit.helper.sequencegenerator.SequenceGenerator;
+import at.jit.helper.sequencegenerator.SequenceGeneratorImpl;
+import at.jit.constants.Converter;
+import at.jit.constants.DmnDataTypes;
+import at.jit.entity.CsvPojo;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.model.dmn.Dmn;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
@@ -21,7 +24,7 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-class DmnCreator {
+public class DmnCreator {
     private DmnModelInstance modelInstance;
     private DecisionTable decisionTable;
     private SequenceGenerator sequenceGenerator;
