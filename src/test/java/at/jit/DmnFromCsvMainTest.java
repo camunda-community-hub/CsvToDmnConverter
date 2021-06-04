@@ -1,5 +1,6 @@
 package at.jit;
 
+import at.jit.constants.Modes;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 

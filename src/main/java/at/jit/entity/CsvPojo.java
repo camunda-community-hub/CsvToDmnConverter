@@ -1,10 +1,10 @@
-package at.jit;
+package at.jit.entity;
 
 import org.camunda.bpm.model.dmn.HitPolicy;
 
 import java.util.List;
 
-class CsvPojo {
+public class CsvPojo {
     private String dmnId;
     private String dmnTitle;
     private HitPolicy hitPolicy;

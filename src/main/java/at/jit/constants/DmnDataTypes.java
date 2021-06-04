@@ -1,6 +1,6 @@
-package at.jit;
+package at.jit.constants;
 
-enum DmnDataTypes {
+public enum DmnDataTypes {
     STRING("string"),
     BOOLEAN("boolean"),
     INTEGER("integer"),

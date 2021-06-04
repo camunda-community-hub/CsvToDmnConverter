@@ -1,12 +1,16 @@
-package at.jit;
+package at.jit.service;
 
+import at.jit.constants.Converter;
+import at.jit.constants.DmnDataTypes;
+import at.jit.entity.CsvPojo;
+import at.jit.entity.InvalidDatatypeException;
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class CsvReader {
+public class CsvReader {
     private int inEnd = 0;
     private int outEnd = 0;
 

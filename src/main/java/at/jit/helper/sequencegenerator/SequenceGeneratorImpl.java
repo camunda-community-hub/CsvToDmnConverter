@@ -1,4 +1,4 @@
-package at.jit.SequenceGenerator;
+package at.jit.helper.sequencegenerator;
 
 public class SequenceGeneratorImpl implements SequenceGenerator {
     private int value = 1;

@@ -1,5 +1,6 @@
-package at.jit;
+package at.jit.service;
 
+import at.jit.constants.Converter;
 import com.opencsv.CSVWriter;
 import org.camunda.bpm.model.dmn.Dmn;
 import org.camunda.bpm.model.dmn.DmnModelInstance;
@@ -22,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class DmnToCsvConverter {
+public class DmnToCsvConverter {
     private final List<List<String>> csvFormatArray;
 
     public DmnToCsvConverter() {
