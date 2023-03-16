@@ -65,13 +65,13 @@ public class DmnFromCsvMain_CmdArgsParsingTest {
         final String actualOutput = Utils.extractAndNormalizeActualOutput(baos);
         assertEquals("", actualOutput);
         if (csvToDmnConversionExpected) {
-            verify(app).convertCsvToDmn(expectedInputFileName, expectedOutputFileName, false);
+            verify(app).convertCsvToDmn(expectedInputFileName, expectedOutputFileName, anyBoolean());
         } else {
             verify(app, never()).convertCsvToDmn(anyString(), anyString(), anyBoolean());
         }
 
         if (dmnToCsvConversionExecuted) {
-            verify(app).convertDmnToCsv(expectedInputFileName, expectedOutputFileName, false);
+            verify(app).convertDmnToCsv(expectedInputFileName, expectedOutputFileName, anyBoolean());
         } else {
             verify(app, never()).convertDmnToCsv(anyString(), anyString(), anyBoolean());
         }

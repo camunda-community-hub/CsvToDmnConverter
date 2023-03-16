@@ -31,7 +31,7 @@ public class DmnToCsvConverter {
         this.csvFormatArray = new ArrayList<>();
     }
 
-    public void convertDmnToCsv(final String dmnFile, final String csv, final boolean includeCamundaVariables) {
+    public void convertDmnToCsv(final String dmnFile, final String csv, boolean includeCamundaVariables) {
         final DmnModelInstance readFile = Dmn.readModelFromFile(new File(dmnFile));
         final Definitions def = readFile.getDefinitions();
         final DecisionImpl decImpl = (DecisionImpl) new ArrayList(def.getDrgElements()).get(0);
