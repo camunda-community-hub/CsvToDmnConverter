@@ -26,18 +26,19 @@ import java.util.List;
 public class DmnToCsvConverter {
     private final List<List<String>> csvFormatArray;
 
+    boolean includeCamundaVariables = false;
     public DmnToCsvConverter() {
         this.csvFormatArray = new ArrayList<>();
     }
 
-    public void convertDmnToCsv(final String dmnFile, final String csv) {
+    public void convertDmnToCsv(final String dmnFile, final String csv, final boolean includeCamundaVariables) {
         final DmnModelInstance readFile = Dmn.readModelFromFile(new File(dmnFile));
         final Definitions def = readFile.getDefinitions();
         final DecisionImpl decImpl = (DecisionImpl) new ArrayList(def.getDrgElements()).get(0);
         final DecisionTable decisionTable = (DecisionTable) new ArrayList(decImpl.getChildElementsByType(DecisionTable.class)).get(0);
 
         final List<Rule> ruleList = new ArrayList<>(decisionTable.getRules());
-
+        this.includeCamundaVariables = includeCamundaVariables;
         setHeaders(decImpl, decisionTable);
         setContent(ruleList);
 
@@ -72,16 +73,20 @@ public class DmnToCsvConverter {
         csvFormatArray.add(inOutLabels);
 
         final List<String> labels = new ArrayList<>();
+        final List<String> inputOutputVariables = new ArrayList<>();
 
         for (final Input input : inputLabels) {
             labels.add(input.getLabel());
+            inputOutputVariables.add(input.getCamundaInputVariable());
         }
 
         for (final Output output : outputsLabels) {
             labels.add(output.getLabel());
+            inputOutputVariables.add(output.getName());
         }
 
         csvFormatArray.add(labels);
+        if (includeCamundaVariables) csvFormatArray.add(inputOutputVariables);
 
         final List<Input> inputColProperties = (List<Input>) decisionTable.getChildElementsByType(Input.class);
         final List<Output> outputColProperties = (List<Output>) decisionTable.getChildElementsByType(Output.class);
@@ -114,7 +119,10 @@ public class DmnToCsvConverter {
                 setRuleElement(singleRule, outputEntry);
             }
 
-            singleRule.add(rule.getDescription().getTextContent());
+
+            if (rule.getDescription()!=null){
+                singleRule.add(rule.getDescription().getTextContent());
+            }
 
             csvFormatArray.add(singleRule);
         }

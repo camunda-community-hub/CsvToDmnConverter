@@ -11,9 +11,11 @@ public class CsvPojo {
 
     private List<String> inColName;
     private List<String> inColDataType;
+    private List<String> inColVariable;
 
     private List<String> outColName;
     private List<String> outColDataType;
+    private List<String> outColVariable;
 
     private List<List<String>> inData;
     private List<List<String>> outData;
@@ -123,6 +125,22 @@ public class CsvPojo {
 
     public void setRowAnnotation(List<String> rowAnnotation) {
         this.rowAnnotation = rowAnnotation;
+    }
+
+    public List<String> getInColVariable() {
+        return inColVariable;
+    }
+
+    public void setInColVariable(List<String> inColVariable) {
+        this.inColVariable = inColVariable;
+    }
+
+    public List<String> getOutColVariable() {
+        return outColVariable;
+    }
+
+    public void setOutColVariable(List<String> outColVariable) {
+        this.outColVariable = outColVariable;
     }
 
     @Override
