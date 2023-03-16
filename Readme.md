@@ -15,6 +15,14 @@ Either -c or -d must be provided.\
 `-i,--input-file <arg>             Input file (CSV or DMN)`\
 `-o,--output-file <arg>            Output file (CSV or DMN)`
 
+## Changes
+**version 1.1.0**
+- provided null check for description and annotations
+- builds fat-jar
+- allows the possibility to parse Camunda Input Variables from DMN column header. Available in both [-c] and [-d] options by using [-cv] option
+
+  ![Camunda input variable][camunda-input-variable]
+
 ## Example
 Your CSV-File (values separated with comma) should look like this (further explanation below)
 ![Origin CSV][origin-csv]
@@ -26,13 +34,7 @@ Your outcome should be following:
 ![Outcome DMN][outcome-dmn]
 
 
-## Changes
-**version 1.1.0**
-- provided null check for description and annotations
-- builds fat-jar
-- allows the possibility to parse Camunda Input Variables from DMN column header. Available in both [-c] and [-d] options by using [-cv] option
 
-  ![Camunda input variable][camunda-input-variable]
 
 
 ## Layout of a compatible file
