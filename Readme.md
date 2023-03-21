@@ -16,7 +16,7 @@ Either -c or -d must be provided.\
 `-o,--output-file <arg>            Output file (CSV or DMN)`
 
 ## Changes
-**version 1.1.0**
+**version 1.0.1**
 - provided null check for description and annotations
 - builds fat-jar
 - allows the possibility to parse Camunda Input Variables from DMN column header. Available in both [-c] and [-d] options by using [-cv] option
