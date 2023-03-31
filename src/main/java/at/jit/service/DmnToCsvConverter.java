@@ -119,8 +119,7 @@ public class DmnToCsvConverter {
                 setRuleElement(singleRule, outputEntry);
             }
 
-
-            if (rule.getDescription()!=null){
+            if (rule.getDescription() != null) {
                 singleRule.add(rule.getDescription().getTextContent());
             }
 
