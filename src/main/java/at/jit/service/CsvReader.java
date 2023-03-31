@@ -8,11 +8,17 @@ import com.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
 public class CsvReader {
     private int inEnd = 0;
     private int outEnd = 0;
+    private boolean includeCamundaVariables;
+
+    public CsvReader(){};
+    public CsvReader(boolean includeCamundaVariables){
+        this.includeCamundaVariables = includeCamundaVariables;
+    };
 
     public CsvPojo readCsv(String path) {
         CsvPojo csvPojo = new CsvPojo();
@@ -22,8 +28,14 @@ public class CsvReader {
             firstLineToPojo(csvPojo, csv.get(0));
             setInOutEnd(csv.get(1));
             setColumnName(csvPojo, csv.get(2));
-            setInOutDataType(csvPojo, csv.get(3));
-            readInOutValuesFromCsv(csvPojo, csv.subList(4, csv.size()));
+            if (includeCamundaVariables) {
+                setColumnVariables(csvPojo, csv.get(3));
+                setInOutDataType(csvPojo, csv.get(4));
+                readInOutValuesFromCsv(csvPojo, csv.subList(5, csv.size()));
+            }else {
+                setInOutDataType(csvPojo, csv.get(3));
+                readInOutValuesFromCsv(csvPojo, csv.subList(4, csv.size()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,6 +61,20 @@ public class CsvReader {
             outColName.add(columnName[i]);
         }
         csvPojo.setOutColName(outColName);
+    }
+
+    private void setColumnVariables(CsvPojo csvPojo, String[] columnName) {
+        List<String> inColVariable = new ArrayList<>();
+        for (int i = 0; i <= inEnd; i++) {
+            inColVariable.add(columnName[i]);
+        }
+        csvPojo.setInColVariable(inColVariable);
+
+        List<String> outColVariable = new ArrayList<>();
+        for (int i = inEnd + 1; i <= outEnd; i++) {
+            outColVariable.add(columnName[i]);
+        }
+        csvPojo.setOutColVariable(outColVariable);
     }
 
     private void setInOutDataType(CsvPojo csvPojo, String[] line) throws InvalidDatatypeException {

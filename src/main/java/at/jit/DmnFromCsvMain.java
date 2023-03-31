@@ -26,6 +26,7 @@ public class DmnFromCsvMain {
     static final String CLI_OPTION_DMN_TO_CSV = "d";
     static final String CLI_OPTION_INPUT_FILE = "i";
     static final String CLI_OPTION_OUTPUT_FILE = "o";
+    static final String CLI_OPTION_CAMUNDA_VARIABLES = "cv";
     private final PrintStream sysErr;
 
     public DmnFromCsvMain() {
@@ -54,6 +55,7 @@ public class DmnFromCsvMain {
         }
 
         final String mode = extractMode(commandLine);
+        final boolean includeCamundaVariables = commandLine.hasOption(CLI_OPTION_CAMUNDA_VARIABLES);
         final String inputFileName = commandLine.getOptionValue(CLI_OPTION_INPUT_FILE);
         final String outputFileName = commandLine.getOptionValue(CLI_OPTION_OUTPUT_FILE);
 
@@ -62,9 +64,9 @@ public class DmnFromCsvMain {
         }
 
         if (Modes.CSV_TO_DMN.equals(mode)) {
-            convertCsvToDmn(inputFileName, outputFileName);
+            convertCsvToDmn(inputFileName, outputFileName, includeCamundaVariables);
         } else if (Modes.DMN_TO_CSV.equals(mode)) {
-            convertDmnToCsv(inputFileName, outputFileName);
+            convertDmnToCsv(inputFileName, outputFileName, includeCamundaVariables);
         } else {
             sysErr.println("Unexpected error");
             return;
@@ -100,10 +102,17 @@ public class DmnFromCsvMain {
                 .desc("Output file (CSV or DMN)")
                 .build();
 
+        final Option includeCamundaVariables = Option.builder(CLI_OPTION_CAMUNDA_VARIABLES)
+                .required(false)
+                .longOpt("include-camunda-variables")
+                .desc("Include Camunda variables")
+                .build();
+
         options.addOption(csvToDmn);
         options.addOption(dmnToCsv);
         options.addOption(inputFileOpt);
         options.addOption(outputFileOpt);
+        options.addOption(includeCamundaVariables);
         return options;
     }
 
@@ -138,16 +147,16 @@ public class DmnFromCsvMain {
         return false;
     }
 
-     void convertDmnToCsv(String inputFile, String outputFile) {
+     void convertDmnToCsv(String inputFile, String outputFile, boolean includeCamundaVariables) {
         DmnToCsvConverter dmnToCsvConverter = new DmnToCsvConverter();
-        dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile);
+        dmnToCsvConverter.convertDmnToCsv(inputFile, outputFile, includeCamundaVariables);
     }
 
-    void convertCsvToDmn(String inputFile, String outputFile) {
-        final CsvReader csvReader = new CsvReader();
+    void convertCsvToDmn(String inputFile, String outputFile, boolean includeCamundaVariables) {
+        final CsvReader csvReader = new CsvReader(includeCamundaVariables);
         final CsvPojo csvPojo = csvReader.readCsv(inputFile);
 
-        final DmnCreator dmnCreator = new DmnCreator();
+        final DmnCreator dmnCreator = new DmnCreator(includeCamundaVariables);
         final DmnModelInstance dmnModelInstance = dmnCreator.createDmnFromCsvPojo(csvPojo);
 
         final DmnFileExporter dmnFileExporter = new DmnFileExporter();
@@ -157,7 +166,7 @@ public class DmnFromCsvMain {
     void printUsageText(final Options options) {
         final HelpFormatter formatter = new HelpFormatter();
         final PrintWriter printWriter = new PrintWriter(sysErr);
-        formatter.printHelp(printWriter, HelpFormatter.DEFAULT_WIDTH, "java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o outputFile", "Either -c or -d must be provided.", options, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD, "");
+        formatter.printHelp(printWriter, HelpFormatter.DEFAULT_WIDTH, "java -jar csv2dmn-converter.jar [-c] [-d] [-cv] -i inputFile -o outputFile", "Either -c or -d must be provided.", options, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD, "");
         printWriter.flush();
     }
 

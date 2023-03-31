@@ -9,10 +9,19 @@ On your .jar file (located in the target folder), which you got from compiling t
 `java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o outputFile`
 
 Either -c or -d must be provided.\
-`-c,--csv-to-dmn          Convert CSV to DMN`\
-`-d,--dmn-to-csv          Convert DMN to CSV`\
-`-i,--input-file <arg>    Input file (CSV or DMN)`\
-`-o,--output-file <arg>   Output file (CSV or DMN)`
+`-c,--csv-to-dmn                   Convert CSV to DMN`\
+`-cv,--include-camunda-variables   Include Camunda variables`\
+`-d,--dmn-to-csv                   Convert DMN to CSV`\
+`-i,--input-file <arg>             Input file (CSV or DMN)`\
+`-o,--output-file <arg>            Output file (CSV or DMN)`
+
+## Changes
+**version 1.1.1**
+- provided null check for description and annotations
+- builds fat-jar
+- allows the possibility to parse Camunda Input Variables from DMN column header. Available in both [-c] and [-d] options by using [-cv] option
+
+  ![Camunda input variable][camunda-input-variable]
 
 ## Example
 Your CSV-File (values separated with comma) should look like this (further explanation below)
@@ -23,6 +32,9 @@ Then on your .jar file in your target folder, which you got from compiling it wi
 
 Your outcome should be following:
 ![Outcome DMN][outcome-dmn]
+
+
+
 
 
 ## Layout of a compatible file
@@ -135,3 +147,4 @@ Austria
 [origin-csv]: docs/OriginCSV.PNG "Origin CSV"
 [command]: docs/Command.PNG "Origin CSV"
 [outcome-dmn]: docs/OutcomeDMN.PNG "Origin CSV"
+[camunda-input-variable]: docs/CamundaInputVariable.PNG "Origin CSV"

@@ -13,21 +13,21 @@ import java.util.Collection;
 
 import static at.jit.Utils.extractAndNormalizeActualOutput;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @RunWith(Parameterized.class)
 public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
-    static final String USAGE_MESSAGE = "usage: java -jar csv2dmn-converter.jar [-c] [-d] -i inputFile -o\n" +
+    static final String USAGE_MESSAGE = "usage: java -jar csv2dmn-converter.jar [-c] [-d] [-cv] -i inputFile -o\n" +
             "            outputFile\n" +
             "Either -c or -d must be provided.\n" +
-            " -c,--csv-to-dmn          Convert CSV to DMN\n" +
-            " -d,--dmn-to-csv          Convert DMN to CSV\n" +
-            " -i,--input-file <arg>    Input file (CSV or DMN)\n" +
-            " -o,--output-file <arg>   Output file (CSV or DMN)";
+            " -c,--csv-to-dmn                   Convert CSV to DMN\n" +
+            " -cv,--include-camunda-variables   Include Camunda variables\n" +
+            " -d,--dmn-to-csv                   Convert DMN to CSV\n" +
+            " -i,--input-file <arg>             Input file (CSV or DMN)\n" +
+            " -o,--output-file <arg>            Output file (CSV or DMN)";
 
     private final String[] args;
     private final String expectedErrorMessage;
@@ -75,8 +75,8 @@ public class DmnFromCsvMain_CmdArgsParsingErrorsTest {
         final String expectedOutput = composeExpectedErrorOutput(expectedErrorMessage);
         assertEquals(expectedOutput, actualOutput);
         verify(sysErr).flush();
-        verify(app, never()).convertCsvToDmn(anyString(), any());
-        verify(app, never()).convertDmnToCsv(anyString(), anyString());
+        verify(app, never()).convertCsvToDmn(anyString(), any(), anyBoolean());
+        verify(app, never()).convertDmnToCsv(anyString(), anyString(), anyBoolean());
 
     }
 

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -54,8 +55,8 @@ public class DmnFromCsvMain_CmdArgsParsingTest {
         final PrintStream sysErr = spy(new PrintStream(baos, true, StandardCharsets.UTF_8.name()));
         final DmnFromCsvMain app = spy(new DmnFromCsvMain(sysErr));
 
-        doNothing().when(app).convertDmnToCsv(anyString(), anyString());
-        doNothing().when(app).convertCsvToDmn(anyString(), anyString());
+        doNothing().when(app).convertDmnToCsv(anyString(), anyString(), anyBoolean());
+        doNothing().when(app).convertCsvToDmn(anyString(), anyString(), anyBoolean());
 
         // When
         app.run(args);
@@ -64,15 +65,15 @@ public class DmnFromCsvMain_CmdArgsParsingTest {
         final String actualOutput = Utils.extractAndNormalizeActualOutput(baos);
         assertEquals("", actualOutput);
         if (csvToDmnConversionExpected) {
-            verify(app).convertCsvToDmn(expectedInputFileName, expectedOutputFileName);
+            verify(app).convertCsvToDmn(expectedInputFileName, expectedOutputFileName, false);
         } else {
-            verify(app, never()).convertCsvToDmn(anyString(), anyString());
+            verify(app, never()).convertCsvToDmn(anyString(), anyString(), anyBoolean());
         }
 
         if (dmnToCsvConversionExecuted) {
-            verify(app).convertDmnToCsv(expectedInputFileName, expectedOutputFileName);
+            verify(app).convertDmnToCsv(expectedInputFileName, expectedOutputFileName, false);
         } else {
-            verify(app, never()).convertDmnToCsv(anyString(), anyString());
+            verify(app, never()).convertDmnToCsv(anyString(), anyString(), anyBoolean());
         }
         Mockito.verifyNoInteractions(sysErr);
     }

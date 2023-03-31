@@ -28,14 +28,20 @@ public class DmnCreator {
     private DmnModelInstance modelInstance;
     private DecisionTable decisionTable;
     private SequenceGenerator sequenceGenerator;
+    private boolean includeCamundaVariables;
+
+    public DmnCreator(){}
+    public DmnCreator(boolean includeCamundaVariables){
+        this.includeCamundaVariables = includeCamundaVariables;
+    }
 
     public DmnModelInstance createDmnFromCsvPojo(CsvPojo csvPojo) {
         sequenceGenerator = new SequenceGeneratorImpl();
 
         initializeBasicDmnModel(csvPojo);
 
-        createInputHeaders(csvPojo.getInColName(), csvPojo.getInColDataType());
-        createOutputHeaders(csvPojo.getOutColName(), csvPojo.getOutColDataType());
+        createInputHeaders(csvPojo.getInColName(), csvPojo.getInColVariable(), csvPojo.getInColDataType());
+        createOutputHeaders(csvPojo.getOutColName(), csvPojo.getOutColVariable(), csvPojo.getOutColDataType());
 
         final List<List<String>> inData = csvPojo.getInData();
         final List<List<String>> outData = csvPojo.getOutData();
@@ -45,7 +51,11 @@ public class DmnCreator {
 
         if (inData.size() == outData.size()) {
             for (int i = 0; i < entries; i++) {
-                createRules(inData.get(i), outData.get(i), annotations.get(i), csvPojo.getInColDataType(), csvPojo.getOutColDataType());
+                String annotation = null;
+                if (annotations!=null && annotations.size()>i) {
+                    annotation = annotations.get(i);
+                }
+                createRules(inData.get(i), outData.get(i), annotation, csvPojo.getInColDataType(), csvPojo.getOutColDataType());
             }
         }
 
@@ -64,7 +74,7 @@ public class DmnCreator {
 
         final Decision decision = modelInstance.newInstance(Decision.class);
 
-        decision.setId(csvPojo.getDmnId().substring(1)); //here a substring is mandatory otherwise there will be an error validating the DMN, somehow the CSV reader reads some character into the variable at index 0
+        decision.setId(csvPojo.getDmnId()); //here a substring is mandatory otherwise there will be an error validating the DMN, somehow the CSV reader reads some character into the variable at index 0
         decision.setName(csvPojo.getDmnTitle());
         definitions.addChildElement(decision);
 
@@ -74,11 +84,12 @@ public class DmnCreator {
         decision.addChildElement(decisionTable);
     }
 
-    public void createInputHeaders(List<String> labels, List<String> dataTypes) {
+    public void createInputHeaders(List<String> labels, List<String> labelVariables, List<String> dataTypes) {
         for (int i = 0; i < labels.size(); i++) {
             final Input input = modelInstance.newInstance(Input.class);
             input.setId(composeId(Converter.INPUT_ID));
             input.setLabel(labels.get(i));
+            if (includeCamundaVariables) input.setCamundaInputVariable(labelVariables.get(i));
             InputExpression inputExpression = modelInstance.newInstance(InputExpression.class);
             inputExpression.setId(Converter.INPUT_EXPRESSION_ID + sequenceGenerator.getNext());
             inputExpression.setTypeRef(dataTypes.get(i));
@@ -91,12 +102,16 @@ public class DmnCreator {
         return format("%s%d", id, sequenceGenerator.getNext());
     }
 
-    public void createOutputHeaders(List<String> labels, List<String> dataTypes) {
+    public void createOutputHeaders(List<String> labels, List<String> labelVariables, List<String> dataTypes) {
         for (int i = 0; i < labels.size(); i++) {
             final Output output = modelInstance.newInstance(Output.class);
             output.setId(Converter.OUTPUT_ID + sequenceGenerator.getNext());
             output.setLabel(labels.get(i));
-            output.setName(labels.get(i));
+            if (includeCamundaVariables){
+                output.setName(labelVariables.get(i));
+            }else {
+                output.setName(labels.get(i));
+            }
             output.setTypeRef(dataTypes.get(i));
             decisionTable.addChildElement(output);
         }
